@@ -15,7 +15,10 @@
       })(window, document, "script", "dataLayer", "GTM-WQXDPWM2");
     </script>
     <!-- End Google Tag Manager -->
-    <meta name="facebook-domain-verification" content="55tv3sfjymi4wxun9n6yzq9j16mk1g" />
+    <meta
+      name="facebook-domain-verification"
+      content="55tv3sfjymi4wxun9n6yzq9j16mk1g"
+    />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Automation Atlas</title>
@@ -3089,13 +3092,19 @@
           height: 440px;
         } */
         .review-video-card {
+          width: 100%; /* خليناه 90% من عرض الشاشة عشان يسيب مسافة شياكة من الجناب */
+          flex-shrink: 0;
+          display: flex;
+          flex-direction: column; /* يضمن إن الفيديو فوق والبار تحت */
+        }
+        .review-video-card .vsl-frame {
           width: 100%;
-        }
-        .video-carousel-track {
-          gap: 11px;
-        }
-        .carousel-wrapper {
-          margin: 20px 3px 0px 0px;
+          height: auto !important; /* نلغي الـ 455px القديمة */
+          aspect-ratio: 9 / 16;
+          background: #000;
+          position: relative;
+          overflow: hidden;
+          display: block; /* غيرناه من flex لـ block عشان الـ aspect-ratio يظبط */
         }
         .play-ring {
           width: 58px;
@@ -3756,6 +3765,65 @@
                     "
                   >
                     <div
+                      class="wistia_embed wistia_async_oqg0kwtp2y videoFoam=true"
+                      style="height: 100%; position: relative; width: 100%"
+                    >
+                      <div
+                        class="wistia_swatch"
+                        style="
+                          height: 100%;
+                          left: 0;
+                          opacity: 0;
+                          overflow: hidden;
+                          position: absolute;
+                          top: 0;
+                          transition: opacity 200ms;
+                          width: 100%;
+                        "
+                      >
+                        <img
+                          src="https://fast.wistia.com/embed/medias/oqg0kwtp2y/swatch"
+                          style="
+                            filter: blur(5px);
+                            height: 100%;
+                            object-fit: contain;
+                            width: 100%;
+                          "
+                          alt=""
+                          aria-hidden="true"
+                          onload="this.parentNode.style.opacity = 1"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="vsl-bar">
+                <strong>عمر عماد، الإسكندرية</strong>
+                وانا لسه في نص الكورس جبت اول عميل ليا وكانت عيادة اسنان ودفعوا
+                فلوس حلوه
+              </div>
+            </div>
+
+            <!-- كارت 2 -->
+            <div class="review-video-card">
+              <div class="vsl-frame">
+                <div
+                  class="wistia_responsive_padding"
+                  style="padding: 177.78% 0 0 0; position: relative"
+                >
+                  <div
+                    class="wistia_responsive_wrapper"
+                    style="
+                      height: 100%;
+                      left: 0;
+                      position: absolute;
+                      top: 0;
+                      width: 100%;
+                    "
+                  >
+                    <div
                       class="wistia_embed wistia_async_p6kqa3edvy videoFoam=true"
                       style="height: 100%; position: relative; width: 100%"
                     >
@@ -3796,7 +3864,7 @@
               </div>
             </div>
 
-            <!-- كارت 2 -->
+            <!-- كارت 3 -->
             <div class="review-video-card">
               <div class="vsl-frame">
                 <div
@@ -3854,65 +3922,6 @@
                 ده من المعلومات عمري ما شوفته في كورس واحد
               </div>
             </div>
-
-            <!-- كارت 3 -->
-            <div class="review-video-card">
-              <div class="vsl-frame">
-                <div
-                  class="wistia_responsive_padding"
-                  style="padding: 177.78% 0 0 0; position: relative"
-                >
-                  <div
-                    class="wistia_responsive_wrapper"
-                    style="
-                      height: 100%;
-                      left: 0;
-                      position: absolute;
-                      top: 0;
-                      width: 100%;
-                    "
-                  >
-                    <div
-                      class="wistia_embed wistia_async_sn2k9l641c videoFoam=true"
-                      style="height: 100%; position: relative; width: 100%"
-                    >
-                      <div
-                        class="wistia_swatch"
-                        style="
-                          height: 100%;
-                          left: 0;
-                          opacity: 0;
-                          overflow: hidden;
-                          position: absolute;
-                          top: 0;
-                          transition: opacity 200ms;
-                          width: 100%;
-                        "
-                      >
-                        <img
-                          src="https://fast.wistia.com/embed/medias/sn2k9l641c/swatch"
-                          style="
-                            filter: blur(5px);
-                            height: 100%;
-                            object-fit: contain;
-                            width: 100%;
-                          "
-                          alt=""
-                          aria-hidden="true"
-                          onload="this.parentNode.style.opacity = 1"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="vsl-bar">
-                <strong>ياسين مصطفى، الجيزة</strong>
-                جبت أول عميل ليا بعد ما خلصت الكورس بأسبوعين
-              </div>
-            </div>
-
             <!-- كارت 4 -->
             <div class="review-video-card">
               <div class="vsl-frame">
@@ -3970,6 +3979,65 @@
                 مفيش كورس متكامل بالشكل ده في الوطن العربي
               </div>
             </div>
+            <!-- كارت 5 -->
+            <div class="review-video-card">
+              <div class="vsl-frame">
+                <div
+                  class="wistia_responsive_padding"
+                  style="padding: 177.78% 0 0 0; position: relative"
+                >
+                  <div
+                    class="wistia_responsive_wrapper"
+                    style="
+                      height: 100%;
+                      left: 0;
+                      position: absolute;
+                      top: 0;
+                      width: 100%;
+                    "
+                  >
+                    <div
+                      class="wistia_embed wistia_async_sn2k9l641c videoFoam=true"
+                      style="height: 100%; position: relative; width: 100%"
+                    >
+                      <div
+                        class="wistia_swatch"
+                        style="
+                          height: 100%;
+                          left: 0;
+                          opacity: 0;
+                          overflow: hidden;
+                          position: absolute;
+                          top: 0;
+                          transition: opacity 200ms;
+                          width: 100%;
+                        "
+                      >
+                        <img
+                          src="https://fast.wistia.com/embed/medias/sn2k9l641c/swatch"
+                          style="
+                            filter: blur(5px);
+                            height: 100%;
+                            object-fit: contain;
+                            width: 100%;
+                          "
+                          alt=""
+                          aria-hidden="true"
+                          onload="this.parentNode.style.opacity = 1"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="vsl-bar">
+                <strong>ياسين مصطفى، الجيزة</strong>
+                جبت أول عميل ليا بعد ما خلصت الكورس بأسبوعين
+              </div>
+            </div>
+
+            <!-- كارت 5 -->
           </div>
 
           <button class="carousel-arrow next-arrow" id="nextBtn">
@@ -5194,9 +5262,7 @@
 
         if (!track || !nextBtn || !prevBtn) return;
 
-        const scrollAmount = 267;
-
-        // نكرر الكروت 3 مرات
+        // نكرر الكروت 3 مرات عشان الـ Infinite Loop
         const originalCards = Array.from(track.children);
         originalCards.forEach((card) => {
           track.appendChild(card.cloneNode(true));
@@ -5204,6 +5270,16 @@
         originalCards.forEach((card) => {
           track.appendChild(card.cloneNode(true));
         });
+
+        // دالة ذكية لحساب العرض الحالي للكارت + الـ 12 بيكسل (الـ Gap)
+        const getDynamicScrollAmount = () => {
+          const firstCard = track.querySelector(".review-video-card");
+          if (firstCard) {
+            // offsetWidth بيجيب عرض الكارت الحقيقي اللي ظاهر قدام المستخدم حالياً
+            return firstCard.offsetWidth + 12;
+          }
+          return 267; // قيمة احتياطية لو حصل مشكلة في التحميل
+        };
 
         setTimeout(() => {
           const singleSetWidth = track.scrollWidth / 3;
@@ -5213,14 +5289,16 @@
 
           function checkLoop() {
             // RTL: scrollLeft بيكون سالب
-            if (track.scrollLeft >= 0) {
+            // لو العميل وصل للبداية (اليمين خالص)
+            if (track.scrollLeft >= -5) {
               track.style.scrollBehavior = "auto";
               track.scrollLeft = -singleSetWidth;
               setTimeout(() => {
                 track.style.scrollBehavior = "smooth";
               }, 20);
             }
-            if (track.scrollLeft <= -(singleSetWidth * 2)) {
+            // لو العميل وصل للنهاية (الشمال خالص)
+            if (track.scrollLeft <= -(singleSetWidth * 2) + 5) {
               track.style.scrollBehavior = "auto";
               track.scrollLeft = -singleSetWidth;
               setTimeout(() => {
@@ -5229,19 +5307,21 @@
             }
           }
 
-          // RTL: next = شمال = سالب، prev = يمين = موجب
+          // عند الضغط على "التالي" (شمال في الـ RTL)
           nextBtn.addEventListener("click", () => {
+            const scrollAmount = getDynamicScrollAmount(); // يحسب العرض "دلوقتي"
             track.scrollBy({ left: -scrollAmount, behavior: "smooth" });
             setTimeout(checkLoop, 400);
           });
 
+          // عند الضغط على "السابق" (يمين في الـ RTL)
           prevBtn.addEventListener("click", () => {
+            const scrollAmount = getDynamicScrollAmount(); // يحسب العرض "دلوقتي"
             track.scrollBy({ left: scrollAmount, behavior: "smooth" });
             setTimeout(checkLoop, 400);
           });
         }, 100);
       }
-
       window.addEventListener("DOMContentLoaded", () => {
         initCountdown();
         initCarousel();
@@ -5398,4 +5478,3 @@
     </script>
   </body>
 </html>
-
