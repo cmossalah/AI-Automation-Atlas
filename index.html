@@ -19,6 +19,15 @@
       name="facebook-domain-verification"
       content="55tv3sfjymi4wxun9n6yzq9j16mk1g"
     />
+    <link
+      rel="preload"
+      href="https://fast.wistia.com/assets/external/E-v1.js"
+      as="script"
+    />
+    <script
+      src="https://fast.wistia.com/assets/external/E-v1.js"
+      async
+    ></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Automation Atlas</title>
@@ -3188,6 +3197,38 @@
       }
     </style>
     <script>
+window._wq = window._wq || [];
+
+  _wq.push({
+    id: "eawq3k4vch",
+    onReady: function (video) {
+      const btn = document.getElementById("customUnmuteBtn");
+      const overlay = document.getElementById("vslOverlay");
+
+      // إجبار الفيديو على العمل
+      video.play();
+
+      // السر هنا: مش هنشيل الغطاء غير لما الفيديو يتحرك ثانية واحدة أو جزء من الثانية
+      video.bind("secondchange", function(s) {
+        if (s >= 0) {
+          if (overlay) {
+            overlay.style.opacity = "0";
+            setTimeout(() => { overlay.style.display = "none"; }, 500);
+          }
+        }
+      });
+
+      if (btn) {
+        btn.addEventListener("click", function () {
+          video.unmute();
+          video.volume(1);
+          video.play();
+          btn.classList.add("hide");
+          setTimeout(() => { btn.style.display = "none"; }, 300);
+        });
+      }
+    },
+  });
       // Popup Someone Just Bought (مثال لعرض إشعار حي عند كل عملية شراء جديدة) //
       let lastId = null; // هنخزن فيه آخر عملية شراء شفناها
 
@@ -3437,25 +3478,25 @@
           </div>
           <script>
             (function () {
-              const STORAGE_KEY = "atlas_timer_end_v3";
-              const DURATION_SECONDS = 72 * 60 * 60; // 5 ساعات
-              let endTime = localStorage.getItem(STORAGE_KEY);
+              // 72 ساعة محولة لـ ميلي ثانية
+              const DURATION_MS = 72 * 60 * 60 * 1000;
 
-              if (endTime && Date.now() < parseInt(endTime)) {
-                // لو في وقت متخزن ولسه مخلصش، احسبه واعرضه فوراً
-                const remaining = Math.max(
-                  0,
-                  Math.floor((parseInt(endTime) - Date.now()) / 1000),
-                );
-                const h = Math.floor(remaining / 3600);
-                const m = Math.floor((remaining % 3600) / 60);
-                const s = remaining % 60;
-                const pad = (n) => String(n).padStart(2, "0");
+              // حساب الوقت الحالي
+              const now = Date.now();
 
-                document.getElementById("topHours").textContent = pad(h);
-                document.getElementById("topMins").textContent = pad(m);
-                document.getElementById("topSecs").textContent = pad(s);
-              }
+              // دي المعادلة السحرية اللي بتوحد العداد وتعمله ريست تلقائي
+              const remainingMs = DURATION_MS - (now % DURATION_MS);
+              const remainingSecs = Math.floor(remainingMs / 1000);
+
+              const h = Math.floor(remainingSecs / 3600);
+              const m = Math.floor((remainingSecs % 3600) / 60);
+              const s = remainingSecs % 60;
+
+              const pad = (n) => String(n).padStart(2, "0");
+
+              document.getElementById("topHours").textContent = pad(h);
+              document.getElementById("topMins").textContent = pad(m);
+              document.getElementById("topSecs").textContent = pad(s);
             })();
           </script>
         </div>
@@ -3514,101 +3555,35 @@
           >
         </div>
         <div class="vsl-wrapper">
-          <div class="vsl-progress" id="vslProgress"></div>
+  <div class="vsl-progress" id="vslProgress"></div>
 
-          <div
-            class="vsl-frame"
-            id="vslFrameContainer"
-            style="position: relative"
-          >
-            <button
-              id="customUnmuteBtn"
-              class="custom-unmute-btn"
-              style="z-index: 999999"
-            >
-              <span class="icon"><i class="fa-solid fa-volume-high"></i></span>
-              <span class="text">تشغيل الصوت</span>
-            </button>
+<div class="vsl-frame" id="vslFrameContainer" style="position: relative; background: #000;">
+    
+    <div id="vslOverlay" style="
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-image: url('https://fast.wistia.com/embed/medias/eawq3k4vch/swatch');
+        background-size: cover;
+        background-position: center;
+        z-index: 5;
+        transition: opacity 0.5s ease;
+    "></div>
 
-            <div
-              class="wistia_responsive_padding"
-              style="padding: 56.25% 0 0 0; position: relative"
-            >
-              <div
-                class="wistia_responsive_wrapper"
-                style="
-                  height: 100%;
-                  left: 0;
-                  position: absolute;
-                  top: 0;
-                  width: 100%;
-                "
-              >
-                <div
-                  class="wistia_embed wistia_async_eawq3k4vch videoFoam=true playerColor=d4af37 autoPlay=true muted=true playsinline=true preload=auto"
-                  style="height: 100%; position: relative; width: 100%"
-                >
-                  <div
-                    class="wistia_swatch"
-                    style="
-                      height: 100%;
-                      left: 0;
-                      opacity: 0;
-                      overflow: hidden;
-                      position: absolute;
-                      top: 0;
-                      transition: opacity 200ms;
-                      width: 100%;
-                    "
-                  >
-                    <img
-                      src="https://fast.wistia.com/embed/medias/eawq3k4vch/swatch"
-                      style="
-                        filter: blur(5px);
-                        height: 100%;
-                        object-fit: cover;
-                        width: 100%;
-                      "
-                      alt=""
-                      aria-hidden="true"
-                      onload="this.parentNode.style.opacity = 1"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+    <button id="customUnmuteBtn" class="custom-unmute-btn" style="z-index: 10; display: flex">
+      <span class="icon"><i class="fa-solid fa-volume-high"></i></span>
+      <span class="text">تشغيل الصوت</span>
+    </button>
 
-            <script
-              src="https://fast.wistia.com/assets/external/E-v1.js"
-              async
-            ></script>
-          </div>
+    <div class="wistia_responsive_padding" style="padding: 177.78% 0 0 0; position: relative">
+      <div class="wistia_responsive_wrapper" style="height: 100%; left: 0; position: absolute; top: 0; width: 100%;">
+        
+        <div class="wistia_embed wistia_async_eawq3k4vch videoFoam=true autoPlay=true muted=true playsinline=true playerColor=d4af37" 
+             style="height: 100%; position: relative; width: 100%">
         </div>
-
-        <script>
-          window._wq = window._wq || [];
-
-          _wq.push({
-            id: "eawq3k4vch",
-            onReady: function (video) {
-              // إجبار الفيديو يشتغل صامت فوراً
-              video.play();
-
-              const btn = document.getElementById("customUnmuteBtn");
-
-              if (btn) {
-                btn.addEventListener("click", function () {
-                  video.unmute();
-                  video.volume(1);
-                  video.play(); // تأكيد للموبايل
-
-                  btn.style.display = "none";
-                });
-              }
-            },
-          });
-        </script>
-
+      </div>
+    </div>
+</div>
+</div>
         <div style="text-align: center" id="heroCta">
           <a href="#payment" class="btn-cta">الانضمام الآن</a>
           <div class="cta-sub-note">
@@ -5113,19 +5088,7 @@
       /* VSL Activation */
       /* Countdown Timer */
       function initCountdown() {
-        const DURATION_SECONDS = 72 * 60 * 60;
-        const STORAGE_KEY = "atlas_timer_end_v3";
-        let endTime = localStorage.getItem(STORAGE_KEY);
-        if (!endTime) {
-          endTime = Date.now() + DURATION_SECONDS * 1000;
-          localStorage.setItem(STORAGE_KEY, endTime);
-        } else {
-          endTime = parseInt(endTime);
-          if (Date.now() >= endTime) {
-            endTime = Date.now() + DURATION_SECONDS * 1000;
-            localStorage.setItem(STORAGE_KEY, endTime);
-          }
-        }
+        const DURATION_MS = 72 * 60 * 60 * 1000; // 72 ساعة بالميلي ثانية
 
         function updateDisplays(h, m, s) {
           const pad = (n) => String(n).padStart(2, "0");
@@ -5139,7 +5102,7 @@
           if (topM) topM.textContent = pad(m);
           if (topS) topS.textContent = pad(s);
 
-          // 2. تحديث العداد التاني اللي في الصفحة (لو موجود عشان الكود القديم بتاعك كان بينادي عليهم)
+          // 2. تحديث العداد التاني اللي في الصفحة
           const cdH = document.getElementById("cdHours");
           const cdM = document.getElementById("cdMins");
           const cdS = document.getElementById("cdSecs");
@@ -5149,16 +5112,21 @@
           if (cdS) cdS.textContent = pad(s);
         }
 
+        // مفيش localStorage هنا، العداد بيحدث نفسه دايماً بناءً على الوقت الفعلي
         const interval = setInterval(() => {
-          const remaining = Math.max(
-            0,
-            Math.floor((endTime - Date.now()) / 1000),
-          );
-          const h = Math.floor(remaining / 3600);
-          const m = Math.floor((remaining % 3600) / 60);
-          const s = remaining % 60;
+          const now = Date.now();
+
+          // المعادلة بتجيب الباقي من قسمة الوقت الحالي على 72 ساعة (عشان يفضل يلف في نفس الدورة)
+          const remainingMs = DURATION_MS - (now % DURATION_MS);
+          const remainingSecs = Math.floor(remainingMs / 1000);
+
+          const h = Math.floor(remainingSecs / 3600);
+          const m = Math.floor((remainingSecs % 3600) / 60);
+          const s = remainingSecs % 60;
+
           updateDisplays(h, m, s);
-          if (remaining <= 0) clearInterval(interval);
+
+          // شيلنا سطر الـ clearInterval لأننا عايزينه يعيد نفسه أوتوماتيك لما يخلص
         }, 1000);
       }
 
