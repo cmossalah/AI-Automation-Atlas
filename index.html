@@ -19,15 +19,31 @@
       name="facebook-domain-verification"
       content="55tv3sfjymi4wxun9n6yzq9j16mk1g"
     />
-    <link
-      rel="preload"
-      href="https://fast.wistia.com/assets/external/E-v1.js"
-      as="script"
-    />
-    <script
-      src="https://fast.wistia.com/assets/external/E-v1.js"
-      async
-    ></script>
+    <script>
+      // دالة ذكية لتحميل سكربت ويسيتيا فقط عند الحاجة أو بعد استقرار الصفحة
+      function loadWistiaScripts() {
+        if (window.wistiaScriptsLoaded) return;
+        const script = document.createElement("script");
+        script.src = "https://fast.wistia.com/assets/external/E-v1.js";
+        script.async = true;
+
+        // أول ما السكربت يخلص تحميل، نادي على دالة الـ VSL فوراً
+        script.onload = () => {
+          if (typeof initMainVSL === "function") initMainVSL();
+        };
+
+        document.head.appendChild(script);
+        window.wistiaScriptsLoaded = true;
+      }
+
+      // انتظر حتى تنتهي الصفحة تماماً من التحميل (بعد ثانية واحدة من الـ load)
+      window.addEventListener("load", () => {
+        setTimeout(loadWistiaScripts, 1000);
+      });
+
+      // أو لو العميل بدأ يعمل سكرول قبل الثانية، حمل فوراً
+      window.addEventListener("scroll", loadWistiaScripts, { once: true });
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Automation Atlas</title>
@@ -3197,38 +3213,6 @@
       }
     </style>
     <script>
-window._wq = window._wq || [];
-
-  _wq.push({
-    id: "eawq3k4vch",
-    onReady: function (video) {
-      const btn = document.getElementById("customUnmuteBtn");
-      const overlay = document.getElementById("vslOverlay");
-
-      // إجبار الفيديو على العمل
-      video.play();
-
-      // السر هنا: مش هنشيل الغطاء غير لما الفيديو يتحرك ثانية واحدة أو جزء من الثانية
-      video.bind("secondchange", function(s) {
-        if (s >= 0) {
-          if (overlay) {
-            overlay.style.opacity = "0";
-            setTimeout(() => { overlay.style.display = "none"; }, 500);
-          }
-        }
-      });
-
-      if (btn) {
-        btn.addEventListener("click", function () {
-          video.unmute();
-          video.volume(1);
-          video.play();
-          btn.classList.add("hide");
-          setTimeout(() => { btn.style.display = "none"; }, 300);
-        });
-      }
-    },
-  });
       // Popup Someone Just Bought (مثال لعرض إشعار حي عند كل عملية شراء جديدة) //
       let lastId = null; // هنخزن فيه آخر عملية شراء شفناها
 
@@ -3555,35 +3539,60 @@ window._wq = window._wq || [];
           >
         </div>
         <div class="vsl-wrapper">
-  <div class="vsl-progress" id="vslProgress"></div>
+          <div class="vsl-progress" id="vslProgress"></div>
 
-<div class="vsl-frame" id="vslFrameContainer" style="position: relative; background: #000;">
-    
-    <div id="vslOverlay" style="
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background-image: url('https://fast.wistia.com/embed/medias/eawq3k4vch/swatch');
-        background-size: cover;
-        background-position: center;
-        z-index: 5;
-        transition: opacity 0.5s ease;
-    "></div>
+          <div
+            class="vsl-frame"
+            id="vslFrameContainer"
+            style="position: relative; background: #000"
+          >
+            <div
+              id="vslOverlay"
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image: url(&quot;https://fast.wistia.com/embed/medias/eawq3k4vch/swatch&quot;);
+                background-size: cover;
+                background-position: center;
+                z-index: 5;
+                transition: opacity 0.5s ease;
+              "
+            ></div>
 
-    <button id="customUnmuteBtn" class="custom-unmute-btn" style="z-index: 10; display: flex">
-      <span class="icon"><i class="fa-solid fa-volume-high"></i></span>
-      <span class="text">تشغيل الصوت</span>
-    </button>
+            <button
+              id="customUnmuteBtn"
+              class="custom-unmute-btn"
+              style="z-index: 10; display: flex"
+            >
+              <span class="icon"><i class="fa-solid fa-volume-high"></i></span>
+              <span class="text">تشغيل الصوت</span>
+            </button>
 
-    <div class="wistia_responsive_padding" style="padding: 177.78% 0 0 0; position: relative">
-      <div class="wistia_responsive_wrapper" style="height: 100%; left: 0; position: absolute; top: 0; width: 100%;">
-        
-        <div class="wistia_embed wistia_async_eawq3k4vch videoFoam=true autoPlay=true muted=true playsinline=true playerColor=d4af37" 
-             style="height: 100%; position: relative; width: 100%">
+            <div
+              class="wistia_responsive_padding"
+              style="padding: 177.78% 0 0 0; position: relative"
+            >
+              <div
+                class="wistia_responsive_wrapper"
+                style="
+                  height: 100%;
+                  left: 0;
+                  position: absolute;
+                  top: 0;
+                  width: 100%;
+                "
+              >
+                <div
+                  class="wistia_embed wistia_async_eawq3k4vch videoFoam=true autoPlay=true muted=true playsinline=true playerColor=d4af37"
+                  style="height: 100%; position: relative; width: 100%"
+                ></div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-</div>
-</div>
         <div style="text-align: center" id="heroCta">
           <a href="#payment" class="btn-cta">الانضمام الآن</a>
           <div class="cta-sub-note">
@@ -5443,6 +5452,85 @@ window._wq = window._wq || [];
 
       // تعديل عند تغيير حجم الشاشة (للموبايل)
       window.addEventListener("resize", updateSlides);
+
+      // تعريف المصفوفة فوراً لمنع الأخطاء
+      window._wq = window._wq || [];
+
+      // 1. دالة تشغيل الفيديو الأساسي
+      function initMainVSL() {
+        if (window.vslInitialized) return;
+        _wq.push({
+          id: "eawq3k4vch",
+          onReady: function (video) {
+            window.vslInitialized = true;
+            const btn = document.getElementById("customUnmuteBtn");
+            const overlay = document.getElementById("vslOverlay");
+
+            video.play();
+
+            video.bind("secondchange", function (s) {
+              if (s >= 0 && overlay) {
+                overlay.style.opacity = "0";
+                setTimeout(() => {
+                  overlay.style.display = "none";
+                }, 500);
+              }
+            });
+
+            if (btn) {
+              btn.onclick = function () {
+                video.unmute();
+                video.volume(1);
+                video.play();
+                btn.classList.add("hide");
+                setTimeout(() => {
+                  btn.style.display = "none";
+                }, 300);
+              };
+            }
+          },
+        });
+      }
+
+      // 2. نظام مراقبة الكروت (Lazy Loading)
+      const videoObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const videoDiv = entry.target;
+              const classMatch = videoDiv.className.match(
+                /wistia_async_([a-zA-Z0-9]+)/,
+              );
+
+              if (classMatch) {
+                const videoId = classMatch[1];
+                // إخبار Wistia بتحميل هذا الكارت الآن
+                _wq.push({ id: videoId });
+                console.log("Review loaded:", videoId);
+              }
+              observer.unobserve(videoDiv);
+            }
+          });
+        },
+        { rootMargin: "300px" },
+      );
+
+      // تشغيل المراقبة عند تحميل الصفحة
+      document.addEventListener("DOMContentLoaded", () => {
+        document
+          .querySelectorAll(".wistia_embed")
+          .forEach((v) => videoObserver.observe(v));
+      });
+
+      // تشغيل احتياطي في حال كان السكربت قد حمل بالفعل
+      if (window.Wistia) {
+        initMainVSL();
+      } else {
+        // لو الـ requestIdleCallback مدعوم، نجهز الدالة
+        if ("requestIdleCallback" in window) {
+          requestIdleCallback(initMainVSL);
+        }
+      }
     </script>
   </body>
 </html>
