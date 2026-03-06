@@ -19,30 +19,21 @@
       name="facebook-domain-verification"
       content="55tv3sfjymi4wxun9n6yzq9j16mk1g"
     />
+    <link rel="preconnect" href="https://fast.wistia.com" />
+    <link rel="preconnect" href="https://fast.wistia.net" />
+    <link rel="dns-prefetch" href="https://fast.wistia.com" />
     <script>
       // دالة ذكية لتحميل سكربت ويسيتيا فقط عند الحاجة أو بعد استقرار الصفحة
-      function loadWistiaScripts() {
-        if (window.wistiaScriptsLoaded) return;
+      (function () {
         const script = document.createElement("script");
         script.src = "https://fast.wistia.com/assets/external/E-v1.js";
         script.async = true;
-
-        // أول ما السكربت يخلص تحميل، نادي على دالة الـ VSL فوراً
+        script.defer = true; // خليه يحمل في الخلفية
         script.onload = () => {
           if (typeof initMainVSL === "function") initMainVSL();
         };
-
         document.head.appendChild(script);
-        window.wistiaScriptsLoaded = true;
-      }
-
-      // انتظر حتى تنتهي الصفحة تماماً من التحميل (بعد ثانية واحدة من الـ load)
-      window.addEventListener("load", () => {
-        setTimeout(loadWistiaScripts, 1000);
-      });
-
-      // أو لو العميل بدأ يعمل سكرول قبل الثانية، حمل فوراً
-      window.addEventListener("scroll", loadWistiaScripts, { once: true });
+      })();
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -5456,24 +5447,24 @@
       // تعريف المصفوفة فوراً لمنع الأخطاء
       window._wq = window._wq || [];
 
-      // 1. دالة تشغيل الفيديو الأساسي
+      // دالة تشغيل الفيديو الأساسي بأمان
       function initMainVSL() {
-        if (window.vslInitialized) return;
+        // بنستهدف الـ ID الفريد اللي عملناه فوق
         _wq.push({
           id: "eawq3k4vch",
+          options: { autoPlay: true, muted: true },
           onReady: function (video) {
-            window.vslInitialized = true;
+            console.log("VSL Ready without errors!");
             const btn = document.getElementById("customUnmuteBtn");
             const overlay = document.getElementById("vslOverlay");
 
+            // تشغيل صامت إجباري
             video.play();
 
             video.bind("secondchange", function (s) {
               if (s >= 0 && overlay) {
                 overlay.style.opacity = "0";
-                setTimeout(() => {
-                  overlay.style.display = "none";
-                }, 500);
+                setTimeout(() => (overlay.style.display = "none"), 500);
               }
             });
 
@@ -5483,53 +5474,39 @@
                 video.volume(1);
                 video.play();
                 btn.classList.add("hide");
-                setTimeout(() => {
-                  btn.style.display = "none";
-                }, 300);
               };
             }
           },
         });
       }
 
-      // 2. نظام مراقبة الكروت (Lazy Loading)
+      // مراقب الكروت الذكي (بيحمل الفيديو بس لما يظهر وبدون تكرار)
       const videoObserver = new IntersectionObserver(
-        (entries, observer) => {
+        (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              const videoDiv = entry.target;
-              const classMatch = videoDiv.className.match(
+              const div = entry.target;
+              // استخراج الـ ID الحقيقي للفيديو
+              const wistiaId = div.className.match(
                 /wistia_async_([a-zA-Z0-9]+)/,
-              );
+              )[1];
 
-              if (classMatch) {
-                const videoId = classMatch[1];
-                // إخبار Wistia بتحميل هذا الكارت الآن
-                _wq.push({ id: videoId });
-                console.log("Review loaded:", videoId);
-              }
-              observer.unobserve(videoDiv);
+              // تفعيل الفيديو ده فقط
+              _wq.push({ id: wistiaId });
+              videoObserver.unobserve(div);
             }
           });
         },
-        { rootMargin: "300px" },
+        { rootMargin: "200px" },
       );
 
-      // تشغيل المراقبة عند تحميل الصفحة
-      document.addEventListener("DOMContentLoaded", () => {
-        document
-          .querySelectorAll(".wistia_embed")
-          .forEach((v) => videoObserver.observe(v));
-      });
+      document
+        .querySelectorAll(".wistia_embed")
+        .forEach((v) => videoObserver.observe(v));
 
-      // تشغيل احتياطي في حال كان السكربت قد حمل بالفعل
+      // تشغيل الـ VSL فوراً لو السكربت جاهز
       if (window.Wistia) {
         initMainVSL();
-      } else {
-        // لو الـ requestIdleCallback مدعوم، نجهز الدالة
-        if ("requestIdleCallback" in window) {
-          requestIdleCallback(initMainVSL);
-        }
       }
     </script>
   </body>
