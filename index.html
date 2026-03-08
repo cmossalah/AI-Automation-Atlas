@@ -309,7 +309,11 @@
   /* ضبط شكل أيقونات التقديم والتأخير عند النقر المزدوج على الموبايل */
   .plyr__control--forward, .plyr__control--rewind {
     border-radius: 12px;
-  }
+  }  
+    /* التأكد إن شريط التحكم السفلي فوق أي طبقة تانية تمنع اللمس */
+    .plyr__controls {
+        z-index: 20 !important; 
+    }
   @media only screen and (max-width: 768px) { 
     .plyr__volume input[type=range] {
       display: none;
@@ -3663,7 +3667,6 @@
                 transition: opacity 0.5s ease;
               "
             ></div>
-
             <button
               id="customUnmuteBtn"
               class="custom-unmute-btn"
@@ -5574,6 +5577,11 @@
       speed: { 
         selected: 1, 
         options: [0.75, 1, 1.25, 1.5, 2] 
+      },
+      fullscreen: { 
+        enabled: true, 
+        fallback: true, 
+        iosNative: true // إجبار الآيفون والآيباد على استخدام الشاشة الكاملة الأصلية
       },
       seekTime: 10,
       autoplay: true, // تفعيل التشغيل التلقائي
