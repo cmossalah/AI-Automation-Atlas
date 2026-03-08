@@ -276,7 +276,6 @@
         opacity: 0;
         pointer-events: none;
       }
-
       /* تنسيق شريط التقدم اللي فوق لو لسه عايزه */
       #vslProgress {
         height: 4px;
@@ -288,7 +287,46 @@
         width: 0%;
         transition: width 0.1s linear;
       }
+.plyr--video .plyr__control--overlaid {
+    background: rgba(212, 175, 55, 0.9); /* أصفر الآطلس */
+    color: #fff;
+    padding: 20px;
+  }
+.plyr__progress input[type=range] {
+  cursor: pointer;
+}
+  .plyr--video .plyr__control--overlaid:hover {
+    background: #d4af37;
+  }
 
+  /* إخفاء كل أدوات التحكم بما فيها الزر الكبير قبل فك الكتم */
+  .hide-controls .plyr__controls, 
+  .hide-controls .plyr__control--overlaid {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* ضبط شكل أيقونات التقديم والتأخير عند النقر المزدوج على الموبايل */
+  .plyr__control--forward, .plyr__control--rewind {
+    border-radius: 12px;
+  }
+  @media only screen and (max-width: 768px) { 
+    .plyr__volume input[type=range] {
+      display: none;
+    }
+
+
+    /* تصغير حجم نصوص القائمة لتناسب الموبايل */
+    .plyr__menu__container [role="menu"] {
+   padding: 3px !important;
+        position: relative;
+        max-height: 95px !important;
+        overflow-y: auto !important;
+    }
+    .plyr__menu__container .plyr__control[role=menuitemradio] {
+      font-size: 11px;
+    }
+  }
       /* ════════════════════════════════════════════════════════
         URGENCY TOP BAR
       ════════════════════════════════════════════════════════ */
@@ -5524,72 +5562,65 @@
       window.addEventListener("resize", updateSlides);
     </script>
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // 1. إعداد المشغل مع تفعيل الـ Autoplay برمجياً وبشكل صامت
+    const player = new Plyr('#mainNativeVsl', {
+      controls: [
+        'play-large', 'rewind', 'play', 'fast-forward', 
+        'progress', 'current-time', 'mute', 'volume', 
+        'settings', 'fullscreen'
+      ],
+      speed: { 
+        selected: 1, 
+        options: [0.75, 1, 1.25, 1.5, 2] 
+      },
+      seekTime: 10,
+      autoplay: true, // تفعيل التشغيل التلقائي
+      muted: true,    // التأكيد على الكتم (شرط أساسي للأوتوبلاي)
+      clickToPlay: true,
+      hideControls: true // بنخفيها إحنا بالكلاس اللي عملناه
+    });
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // 1. إعداد المشغل مع تفعيل التشغيل التلقائي برمجياً
-        const player = new Plyr("#mainNativeVsl", {
-          controls: [
-            "play-large",
-            "play",
-            "progress",
-            "current-time",
-            "mute",
-            "volume",
-            "fullscreen",
-          ],
-          settings: ["speed"],
-          autoplay: true,
-          muted: true,
-          clickToPlay: false, // عشان نمنع التوقف لو ضغط غلط قبل فك الكتم
-          keyboard: { focused: false, global: false },
+    const btn = document.getElementById("customUnmuteBtn");
+    const overlay = document.getElementById("vslOverlay");
+    const wrapper = document.getElementById("playerWrapper");
+
+    // 🔥 أهم جزء: إجبار الفيديو على العمل فور جاهزية المكتبة
+    player.on('ready', () => {
+      player.muted = true; // نضمن إنه صامت
+      const playPromise = player.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          // في حالة رفض المتصفح (نادر جداً لو صامت)، هيفضل مستني الضغطة
+          console.log("Autoplay context: Waiting for user.");
         });
+      }
+    });
 
-        const btn = document.getElementById("customUnmuteBtn");
-        const overlay = document.getElementById("vslOverlay");
-        const wrapper = document.getElementById("playerWrapper");
-
-        // محاولة تشغيل إجبارية بمجرد جاهزية المشغل
-        player.on("ready", (event) => {
-          player.muted = true; // نؤكد الكتم لضمان الأوتوبلاي
-          player.play().catch((error) => {
-            console.log("Autoplay failed, waiting for user interaction");
-          });
-        });
-
-        // 2. منطق زرار "تشغيل الصوت" مع الـ Smooth Transition
-        if (btn) {
-          btn.onclick = function () {
-            // تأثير السينما (Fade Out)
-            overlay.style.opacity = "0";
-            btn.style.opacity = "0";
-
-            setTimeout(() => {
-              overlay.style.display = "none";
-              btn.style.display = "none";
-
-              // إظهار التحكمات الصفراء
-              wrapper.classList.remove("hide-controls");
-
-              // إعادة التشغيل مع الصوت بسلاسة
-              player.currentTime = 0;
-              player.muted = false;
-              player.volume = 1;
-              player.play();
-            }, 400);
-          };
-        }
-
-        // تحديث شريط التقدم العلوي
-        player.on("timeupdate", (event) => {
-          const instance = event.detail.plyr;
-          const progress = document.getElementById("vslProgress");
-          if (progress) {
-            progress.style.width =
-              (instance.currentTime / instance.duration) * 100 + "%";
-          }
-        });
-      });
-    </script>
+    // 2. منطق زرار "تشغيل الصوت" (الـ Unmute)
+    if (btn) {
+      btn.onclick = function() {
+        overlay.style.opacity = "0";
+        btn.style.opacity = "0";
+        
+        setTimeout(() => {
+          overlay.style.display = "none";
+          btn.style.display = "none";
+          
+          // إظهار التحكمات الصفراء والـ Controls بالكامل
+          wrapper.classList.remove("hide-controls");
+          
+          // الانتقال السلس للصوت والبداية
+          player.currentTime = 0;
+          player.muted = false;
+          player.volume = 1;
+          player.play();
+        }, 400); 
+      };
+    }
+  });
+</script>
   </body>
 </html>
