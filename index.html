@@ -22,19 +22,70 @@
     <link rel="preconnect" href="https://fast.wistia.com" />
     <link rel="preconnect" href="https://fast.wistia.net" />
     <link rel="dns-prefetch" href="https://fast.wistia.com" />
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+
     <script>
-      // دالة ذكية لتحميل سكربت ويسيتيا فقط عند الحاجة أو بعد استقرار الصفحة
-      (function () {
-        const script = document.createElement("script");
-        script.src = "https://fast.wistia.com/assets/external/E-v1.js";
-        script.async = true;
-        script.defer = true; // خليه يحمل في الخلفية
-        script.onload = () => {
-          if (typeof initMainVSL === "function") initMainVSL();
-        };
-        document.head.appendChild(script);
-      })();
+      document.addEventListener("DOMContentLoaded", function () {
+        const video = document.getElementById("mainNativeVsl");
+        const btn = document.getElementById("customUnmuteBtn");
+        const overlay = document.getElementById("vslOverlay");
+        const progressBar = document.getElementById("vslProgress"); // شريط التقدم اللي فوق
+
+        // 1. إخفاء الـ Overlay بمجرد بدء تشغيل الفيديو فعلياً
+        video.addEventListener("playing", function () {
+          if (overlay) {
+            overlay.style.opacity = "0";
+            setTimeout(() => {
+              overlay.style.display = "none";
+            }, 500);
+          }
+        });
+
+        // 2. تحديث شريط التقدم (Progress Bar)
+        video.addEventListener("timeupdate", function () {
+          if (progressBar && video.duration) {
+            const percentage = (video.currentTime / video.duration) * 100;
+            progressBar.style.width = percentage + "%";
+          }
+        });
+
+        // 3. تفعيل زرار الصوت وإظهار التحكم
+        if (btn) {
+          btn.onclick = function () {
+            video.muted = false; // فك الكتم
+            video.volume = 1; // أعلى صوت
+            video.currentTime = 0; // نرجع الفيديو من الأول
+
+            // 🔥 السطر السحري: إظهار كل أدوات التحكم للمستخدم (توقيف، تقديم، تكبير) 🔥
+            video.setAttribute("controls", "controls");
+
+            // إخفاء شريط التقدم المخصص عشان ميعملش زحمة مع شريط المتصفح الأساسي
+            if (progressBar) {
+              progressBar.style.display = "none";
+            }
+
+            video.play();
+
+            // إخفاء الزرار نفسه
+            btn.classList.add("hide");
+            setTimeout(() => {
+              btn.style.display = "none";
+            }, 300);
+          };
+        }
+
+        // محاولة التشغيل التلقائي الصامت كإجراء احتياطي
+        let playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((error) => {
+            console.log(
+              "المتصفح منع التشغيل التلقائي، في انتظار تفاعل المستخدم.",
+            );
+          });
+        }
+      });
     </script>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Automation Atlas</title>
@@ -214,6 +265,28 @@
       a {
         color: inherit;
         text-decoration: none;
+      }
+      :root {
+        --plyr-color-main: #d4af37; /* الأصفر بتاعك */
+        --plyr-video-control-background-hover: rgba(212, 175, 55, 0.8);
+      }
+
+      /* عشان نخفي التحكمات في البداية خالص */
+      .hide-controls .plyr__controls {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* تنسيق شريط التقدم اللي فوق لو لسه عايزه */
+      #vslProgress {
+        height: 4px;
+        background: #d4af37;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 20;
+        width: 0%;
+        transition: width 0.1s linear;
       }
 
       /* ════════════════════════════════════════════════════════
@@ -3545,7 +3618,7 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background-image: url(&quot;https://fast.wistia.com/embed/medias/eawq3k4vch/swatch&quot;);
+                background-image: url(&quot;./imgs/thumbnail.png&quot;);
                 background-size: cover;
                 background-position: center;
                 z-index: 5;
@@ -3563,11 +3636,11 @@
             </button>
 
             <div
-              class="wistia_responsive_padding"
-              style="padding: 177.78% 0 0 0; position: relative"
+              style="width: 100%; height: 100%; position: relative"
+              class="hide-controls"
+              id="playerWrapper"
             >
               <div
-                class="wistia_responsive_wrapper"
                 style="
                   height: 100%;
                   left: 0;
@@ -3576,10 +3649,16 @@
                   width: 100%;
                 "
               >
-                <div
-                  class="wistia_embed wistia_async_eawq3k4vch videoFoam=true autoPlay=true muted=true playsinline=true playerColor=d4af37"
-                  style="height: 100%; position: relative; width: 100%"
-                ></div>
+                <video
+                  id="mainNativeVsl"
+                  playsinline
+                  autoplay
+                  muted
+                  style="width: 100%; height: 100%; object-fit: cover"
+                >
+                  <source src="./imgs/vsl.mp4" type="video/mp4" />
+                  متصفحك لا يدعم تشغيل الفيديو.
+                </video>
               </div>
             </div>
           </div>
@@ -5443,71 +5522,74 @@
 
       // تعديل عند تغيير حجم الشاشة (للموبايل)
       window.addEventListener("resize", updateSlides);
+    </script>
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 
-      // تعريف المصفوفة فوراً لمنع الأخطاء
-      window._wq = window._wq || [];
-
-      // دالة تشغيل الفيديو الأساسي بأمان
-      function initMainVSL() {
-        // بنستهدف الـ ID الفريد اللي عملناه فوق
-        _wq.push({
-          id: "eawq3k4vch",
-          options: { autoPlay: true, muted: true },
-          onReady: function (video) {
-            console.log("VSL Ready without errors!");
-            const btn = document.getElementById("customUnmuteBtn");
-            const overlay = document.getElementById("vslOverlay");
-
-            // تشغيل صامت إجباري
-            video.play();
-
-            video.bind("secondchange", function (s) {
-              if (s >= 0 && overlay) {
-                overlay.style.opacity = "0";
-                setTimeout(() => (overlay.style.display = "none"), 500);
-              }
-            });
-
-            if (btn) {
-              btn.onclick = function () {
-                video.unmute();
-                video.volume(1);
-                video.play();
-                btn.classList.add("hide");
-              };
-            }
-          },
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // 1. إعداد المشغل مع تفعيل التشغيل التلقائي برمجياً
+        const player = new Plyr("#mainNativeVsl", {
+          controls: [
+            "play-large",
+            "play",
+            "progress",
+            "current-time",
+            "mute",
+            "volume",
+            "fullscreen",
+          ],
+          settings: ["speed"],
+          autoplay: true,
+          muted: true,
+          clickToPlay: false, // عشان نمنع التوقف لو ضغط غلط قبل فك الكتم
+          keyboard: { focused: false, global: false },
         });
-      }
 
-      // مراقب الكروت الذكي (بيحمل الفيديو بس لما يظهر وبدون تكرار)
-      const videoObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const div = entry.target;
-              // استخراج الـ ID الحقيقي للفيديو
-              const wistiaId = div.className.match(
-                /wistia_async_([a-zA-Z0-9]+)/,
-              )[1];
+        const btn = document.getElementById("customUnmuteBtn");
+        const overlay = document.getElementById("vslOverlay");
+        const wrapper = document.getElementById("playerWrapper");
 
-              // تفعيل الفيديو ده فقط
-              _wq.push({ id: wistiaId });
-              videoObserver.unobserve(div);
-            }
+        // محاولة تشغيل إجبارية بمجرد جاهزية المشغل
+        player.on("ready", (event) => {
+          player.muted = true; // نؤكد الكتم لضمان الأوتوبلاي
+          player.play().catch((error) => {
+            console.log("Autoplay failed, waiting for user interaction");
           });
-        },
-        { rootMargin: "200px" },
-      );
+        });
 
-      document
-        .querySelectorAll(".wistia_embed")
-        .forEach((v) => videoObserver.observe(v));
+        // 2. منطق زرار "تشغيل الصوت" مع الـ Smooth Transition
+        if (btn) {
+          btn.onclick = function () {
+            // تأثير السينما (Fade Out)
+            overlay.style.opacity = "0";
+            btn.style.opacity = "0";
 
-      // تشغيل الـ VSL فوراً لو السكربت جاهز
-      if (window.Wistia) {
-        initMainVSL();
-      }
+            setTimeout(() => {
+              overlay.style.display = "none";
+              btn.style.display = "none";
+
+              // إظهار التحكمات الصفراء
+              wrapper.classList.remove("hide-controls");
+
+              // إعادة التشغيل مع الصوت بسلاسة
+              player.currentTime = 0;
+              player.muted = false;
+              player.volume = 1;
+              player.play();
+            }, 400);
+          };
+        }
+
+        // تحديث شريط التقدم العلوي
+        player.on("timeupdate", (event) => {
+          const instance = event.detail.plyr;
+          const progress = document.getElementById("vslProgress");
+          if (progress) {
+            progress.style.width =
+              (instance.currentTime / instance.duration) * 100 + "%";
+          }
+        });
+      });
     </script>
   </body>
 </html>
