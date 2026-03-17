@@ -287,48 +287,49 @@
         width: 0%;
         transition: width 0.1s linear;
       }
-.plyr--video .plyr__control--overlaid {
-    background: rgba(212, 175, 55, 0.9); /* أصفر الآطلس */
-    color: #fff;
-    padding: 20px;
-  }
-.plyr__progress input[type=range] {
-  cursor: pointer;
-}
-  .plyr--video .plyr__control--overlaid:hover {
-    background: #d4af37;
-  }
+      .plyr--video .plyr__control--overlaid {
+        background: rgba(212, 175, 55, 0.9); /* أصفر الآطلس */
+        color: #fff;
+        padding: 20px;
+      }
+      .plyr__progress input[type="range"] {
+        cursor: pointer;
+      }
+      .plyr--video .plyr__control--overlaid:hover {
+        background: #d4af37;
+      }
 
-  /* إخفاء كل أدوات التحكم بما فيها الزر الكبير قبل فك الكتم */
-  .hide-controls .plyr__controls, 
-  .hide-controls .plyr__control--overlaid {
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
+      /* إخفاء كل أدوات التحكم بما فيها الزر الكبير قبل فك الكتم */
+      .hide-controls .plyr__controls,
+      .hide-controls .plyr__control--overlaid {
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
 
-  /* ضبط شكل أيقونات التقديم والتأخير عند النقر المزدوج على الموبايل */
-  .plyr__control--forward, .plyr__control--rewind {
-    border-radius: 12px;
-  }  
-    /* التأكد إن شريط التحكم السفلي فوق أي طبقة تانية تمنع اللمس */
-    .plyr__controls {
-        z-index: 20 !important; 
-    }
-  @media only screen and (max-width: 768px) { 
-    .plyr__volume input[type=range] {
-      display: none;
-    }
-    /* تصغير حجم نصوص القائمة لتناسب الموبايل */
-    .plyr__menu__container [role="menu"] {
-   padding: 3px !important;
-        position: relative;
-        max-height: 95px !important;
-        overflow-y: auto !important;
-    }
-    .plyr__menu__container .plyr__control[role=menuitemradio] {
-      font-size: 11px;
-    }
-  }
+      /* ضبط شكل أيقونات التقديم والتأخير عند النقر المزدوج على الموبايل */
+      .plyr__control--forward,
+      .plyr__control--rewind {
+        border-radius: 12px;
+      }
+      /* التأكد إن شريط التحكم السفلي فوق أي طبقة تانية تمنع اللمس */
+      .plyr__controls {
+        z-index: 20 !important;
+      }
+      @media only screen and (max-width: 768px) {
+        .plyr__volume input[type="range"] {
+          display: none;
+        }
+        /* تصغير حجم نصوص القائمة لتناسب الموبايل */
+        .plyr__menu__container [role="menu"] {
+          padding: 3px !important;
+          position: relative;
+          max-height: 95px !important;
+          overflow-y: auto !important;
+        }
+        .plyr__menu__container .plyr__control[role="menuitemradio"] {
+          font-size: 11px;
+        }
+      }
       /* ════════════════════════════════════════════════════════
         URGENCY TOP BAR
       ════════════════════════════════════════════════════════ */
@@ -3658,7 +3659,7 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background-image: url('https://atlas-vsl-cdn.b-cdn.net/thumbnail.png');
+                background-image: url(&quot;https://atlas-vsl-cdn.b-cdn.net/thumbnail.png&quot;);
                 background-size: cover;
                 background-position: center;
                 z-index: 5;
@@ -3695,7 +3696,10 @@
                   muted
                   style="width: 100%; height: 100%; object-fit: cover"
                 >
-                  <source src="https://atlas-vsl-cdn.b-cdn.net/vsl.mp4" type="video/mp4" />
+                  <source
+                    src="https://atlas-vsl-cdn.b-cdn.net/vsl.mp4"
+                    type="video/mp4"
+                  />
                   متصفحك لا يدعم تشغيل الفيديو.
                 </video>
               </div>
@@ -3740,7 +3744,7 @@
             <div class="stat-num">
               <span class="accent"
                 ><i style="margin-left: 8px" class="fa-solid fa-users"></i
-                >173+</span
+                >250+</span
               >
             </div>
             <div class="stat-label">طالب ملتحق بالبرنامج</div>
@@ -3749,7 +3753,7 @@
             <div class="stat-num">
               <span class="accent"
                 ><i style="margin-left: 8px" class="fa-solid fa-clock"></i
-                >40+</span
+                >60+</span
               >
             </div>
             <div class="stat-label">ساعة من المحتوى الحصري والخبرة العملية</div>
@@ -3761,7 +3765,7 @@
                 >5.0</span
               >
             </div>
-            <div class="stat-label">من تقييم اكثر من 50 مشترك</div>
+            <div class="stat-label">من تقييم اكثر من 30 مشترك</div>
           </div>
         </div>
       </div>
@@ -4011,8 +4015,8 @@
 
               <div class="vsl-bar">
                 <strong>منذر، الغربية</strong>
-                أسسست وكالة stirx.ai, أخدت كورسات على Udemy و Coursera بس الكم
-                ده من المعلومات عمري ما شوفته في كورس واحد
+                أسست وكالة stirx.ai, أخدت كورسات على Udemy و Coursera بس الكم ده
+                من المعلومات عمري ما شوفته في كورس واحد
               </div>
             </div>
             <!-- كارت 4 -->
@@ -4210,12 +4214,12 @@
         </div>
         <div class="course-stats">
           <span style="color: var(--gold); font-weight: 700">
-            عدد الدروس: <i class="fa-solid fa-play"></i> 38</span
+            عدد الدروس: <i class="fa-solid fa-play"></i> 44</span
           >
           <span style="color: var(--gold); font-weight: 700"
             >المدة الاجمالية:
             <i class="fa-solid fa-stopwatch"></i>
-            44h 12m
+            45h 12m
           </span>
         </div>
 
@@ -4474,18 +4478,144 @@
             </li>
           </ul>
         </div>
+        <!-- Chapter 6 -->
+        <div class="module">
+          <div class="module-header" onclick="toggleModule(this)">
+            <div>
+              <h4>Chapter 6: Client Acquisition</h4>
+              <p style="color: var(--sb-text-dim); font-size: 0.7rem">
+                Coming soon
+              </p>
+            </div>
+            <div class="header-meta">
+              <span class="chapter-time"
+                ><i class="fa-regular fa-clock"></i> Coming Soon</span
+              >
+              <span class="arrow-icon">▼</span>
+            </div>
+          </div>
+          <ul class="lesson-list">
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+          </ul>
+        </div>
+        <!-- Chapter 7 -->
+        <div class="module">
+          <div class="module-header" onclick="toggleModule(this)">
+            <div>
+              <h4>Chapter 7: Powerful Creation</h4>
+              <p style="color: var(--sb-text-dim); font-size: 0.7rem">
+                Coming soon
+              </p>
+            </div>
+            <div class="header-meta">
+              <span class="chapter-time"
+                ><i class="fa-regular fa-clock"></i> Coming Soon</span
+              >
+              <span class="arrow-icon">▼</span>
+            </div>
+          </div>
+          <ul class="lesson-list">
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+          </ul>
+        </div>
+        <!-- Chapter 8 -->
+        <div class="module">
+          <div class="module-header" onclick="toggleModule(this)">
+            <div>
+              <h4>Chapter 8: Machine Learning</h4>
+              <p style="color: var(--sb-text-dim); font-size: 0.7rem">
+                Coming soon
+              </p>
+            </div>
+            <div class="header-meta">
+              <span class="chapter-time"
+                ><i class="fa-regular fa-clock"></i> Coming Soon</span
+              >
+              <span class="arrow-icon">▼</span>
+            </div>
+          </div>
+          <ul class="lesson-list">
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Coming Soon
+            </li>
+          </ul>
+        </div>
+
         <!-- Live Sessions -->
         <div class="module">
           <div class="module-header" onclick="toggleModule(this)">
             <div>
               <h4>Live Sessions</h4>
               <p style="color: var(--sb-text-dim); font-size: 0.7rem">
-                2 Lessons
+                3 Lessons
               </p>
             </div>
             <div class="header-meta">
               <span class="chapter-time"
-                ><i class="fa-regular fa-clock"></i> 2h 40m</span
+                ><i class="fa-regular fa-clock"></i> 3h 40m</span
               >
               <span class="arrow-icon">▼</span>
             </div>
@@ -4498,6 +4628,10 @@
             <li class="lesson">
               <div class="circle"></div>
               Live Session 2
+            </li>
+            <li class="lesson">
+              <div class="circle"></div>
+              Live Session 3
             </li>
           </ul>
         </div>
@@ -4996,7 +5130,7 @@
           </a>
           <div class="cta-sub-note" style="margin-top: 18px">
             <span class="note-item"
-              ><i class="fa-solid fa-users"></i> +120 مشترك</span
+              ><i class="fa-solid fa-users"></i> +250 مشترك</span
             >
             <span class="note-item"
               ><span
@@ -5080,8 +5214,17 @@
                 style="color: var(--green)"
                 class="fa-brands fa-square-whatsapp"
               ></i>
-              بعد التحويل ابعت الإيصال على <a href="https://wa.me/201062143146?text=%D8%AA%D9%85%20%D8%A7%D9%84%D8%AF%D9%81%D8%B9" style="text-decoration: underline; font-size: bold; color:var(--green)">واتساب</a> للتفعيل الفوري والتيم هيرد
-              عليك خلال لحظات
+              بعد التحويل ابعت الإيصال على
+              <a
+                href="https://wa.me/201062143146?text=%D8%AA%D9%85%20%D8%A7%D9%84%D8%AF%D9%81%D8%B9"
+                style="
+                  text-decoration: underline;
+                  font-size: bold;
+                  color: var(--green);
+                "
+                >واتساب</a
+              >
+              للتفعيل الفوري والتيم هيرد عليك خلال لحظات
             </p>
           </div>
         </div>
@@ -5560,70 +5703,77 @@
       window.addEventListener("resize", updateSlides);
     </script>
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // 1. إعداد المشغل مع تفعيل الـ Autoplay برمجياً وبشكل صامت
-    const player = new Plyr('#mainNativeVsl', {
-      controls: [
-        'play-large', 'rewind', 'play', 'fast-forward', 
-        'progress', 'current-time', 'mute', 'volume', 
-        'settings', 'fullscreen'
-      ],
-      speed: { 
-        selected: 1, 
-        options: [0.75, 1, 1.25, 1.5, 2] 
-      },
-      fullscreen: { 
-        enabled: true, 
-        fallback: true, 
-        iosNative: true // إجبار الآيفون والآيباد على استخدام الشاشة الكاملة الأصلية
-      },
-      seekTime: 10,
-      autoplay: true, // تفعيل التشغيل التلقائي
-      muted: true,    // التأكيد على الكتم (شرط أساسي للأوتوبلاي)
-      clickToPlay: true,
-      hideControls: true // بنخفيها إحنا بالكلاس اللي عملناه
-    });
-
-    const btn = document.getElementById("customUnmuteBtn");
-    const overlay = document.getElementById("vslOverlay");
-    const wrapper = document.getElementById("playerWrapper");
-
-    // 🔥 أهم جزء: إجبار الفيديو على العمل فور جاهزية المكتبة
-    player.on('ready', () => {
-      player.muted = true; // نضمن إنه صامت
-      const playPromise = player.play();
-      
-      if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          // في حالة رفض المتصفح (نادر جداً لو صامت)، هيفضل مستني الضغطة
-          console.log("Autoplay context: Waiting for user.");
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // 1. إعداد المشغل مع تفعيل الـ Autoplay برمجياً وبشكل صامت
+        const player = new Plyr("#mainNativeVsl", {
+          controls: [
+            "play-large",
+            "rewind",
+            "play",
+            "fast-forward",
+            "progress",
+            "current-time",
+            "mute",
+            "volume",
+            "settings",
+            "fullscreen",
+          ],
+          speed: {
+            selected: 1,
+            options: [0.75, 1, 1.25, 1.5, 2],
+          },
+          fullscreen: {
+            enabled: true,
+            fallback: true,
+            iosNative: true, // إجبار الآيفون والآيباد على استخدام الشاشة الكاملة الأصلية
+          },
+          seekTime: 10,
+          autoplay: true, // تفعيل التشغيل التلقائي
+          muted: true, // التأكيد على الكتم (شرط أساسي للأوتوبلاي)
+          clickToPlay: true,
+          hideControls: true, // بنخفيها إحنا بالكلاس اللي عملناه
         });
-      }
-    });
 
-    // 2. منطق زرار "تشغيل الصوت" (الـ Unmute)
-    if (btn) {
-      btn.onclick = function() {
-        overlay.style.opacity = "0";
-        btn.style.opacity = "0";
-        
-        setTimeout(() => {
-          overlay.style.display = "none";
-          btn.style.display = "none";
-          
-          // إظهار التحكمات الصفراء والـ Controls بالكامل
-          wrapper.classList.remove("hide-controls");
-          
-          // الانتقال السلس للصوت والبداية
-          player.currentTime = 0;
-          player.muted = false;
-          player.volume = 1;
-          player.play();
-        }, 400); 
-      };
-    }
-  });
-</script>
+        const btn = document.getElementById("customUnmuteBtn");
+        const overlay = document.getElementById("vslOverlay");
+        const wrapper = document.getElementById("playerWrapper");
+
+        // 🔥 أهم جزء: إجبار الفيديو على العمل فور جاهزية المكتبة
+        player.on("ready", () => {
+          player.muted = true; // نضمن إنه صامت
+          const playPromise = player.play();
+
+          if (playPromise !== undefined) {
+            playPromise.catch((error) => {
+              // في حالة رفض المتصفح (نادر جداً لو صامت)، هيفضل مستني الضغطة
+              console.log("Autoplay context: Waiting for user.");
+            });
+          }
+        });
+
+        // 2. منطق زرار "تشغيل الصوت" (الـ Unmute)
+        if (btn) {
+          btn.onclick = function () {
+            overlay.style.opacity = "0";
+            btn.style.opacity = "0";
+
+            setTimeout(() => {
+              overlay.style.display = "none";
+              btn.style.display = "none";
+
+              // إظهار التحكمات الصفراء والـ Controls بالكامل
+              wrapper.classList.remove("hide-controls");
+
+              // الانتقال السلس للصوت والبداية
+              player.currentTime = 0;
+              player.muted = false;
+              player.volume = 1;
+              player.play();
+            }, 400);
+          };
+        }
+      });
+    </script>
   </body>
 </html>
