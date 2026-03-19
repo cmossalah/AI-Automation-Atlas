@@ -3542,7 +3542,7 @@
             class="time-box"
             style="display: flex; align-items: baseline; gap: 3px"
           >
-            <span id="topHours">72</span>
+            <span id="topHours">00</span>
             <span class="metric">ساعات</span>
           </div>
 
@@ -4688,7 +4688,7 @@
           </div>
           <h3>الخصم متاح لمدة 3 ايام العيد فقط</h3>
           <p class="price-sub-desc">
-            السعر الحالي في العيد: 2,999 جنيه وبعدها يرجع السعر الطبيعي.
+            السعر الحالي في العيد: 2,500 جنيه وبعدها يرجع السعر الطبيعي.
           </p>
 
           <div class="price-main-box">
@@ -4697,7 +4697,7 @@
               <div class="price-amount" style="direction: ltr">2,500 EGP</div>
               <span class="sub-label"
                 >بعد العيد هيرجع السعر لـ
-                <span style="color: var(--red)">3,999 جنيه</span></span
+                <span style="color: var(--red)">4,000 جنيه</span></span
               >
             </div>
           </div>
@@ -4885,7 +4885,7 @@
 
             <div class="scarcity-note">
               <i class="fa-solid fa-hourglass-half"></i> السعر هيرتفع بعد العيد
-              العدد
+              
             </div>
 
             <!-- <div class="slots-bar">
@@ -5333,8 +5333,8 @@
     ════════════════════════════════════════ -->
     <div class="sticky-cta" id="stickyCta">
       <div class="sticky-left">
-        <strong>خصم 25% ينتهي قريباً</strong>
-        <span>EGP 2,999 فقط | ضمان استرداد 3 أيام</span>
+        <strong>خصم 40% ينتهي بعد العيد</strong>
+        <span>EGP 2,500 فقط | ضمان استرداد 3 أيام</span>
       </div>
       <a href="#payment" class="btn-cta">انضم الآن ←</a>
     </div>
@@ -5389,66 +5389,96 @@
       // }
 
       // تحديد ميعاد انتهاء العرض (نهاية ثالث أيام العيد - 22 مارس الساعة 11:59 مساءً بتوقيت مصر)
-const EID_END_DATE = new Date("March 22, 2026 23:59:59").getTime();
 
+
+     
+// 1. إعدادات عداد العيد (مربوط بتاريخ 22 مارس)
 (function () {
-  // دالة مساعدة لضبط شكل الأرقام (إضافة صفر على الشمال لو الرقم أقل من 10)
-  const pad = (n) => String(n).padStart(2, "0");
+    const EID_END_DATE = new Date("March 22, 2026 23:59:59").getTime();
+    const pad = (n) => String(n).padStart(2, "0");
 
-  function updateDisplays(h, m, s) {
-    // 1. تحديث عداد الهيدر (الجديد)
-    const topH = document.getElementById("topHours");
-    const topM = document.getElementById("topMins");
-    const topS = document.getElementById("topSecs");
+    // دالة التحديث
+    function updateAll() {
+        const now = Date.now();
+        const remainingMs = EID_END_DATE - now;
 
-    if (topH) topH.textContent = pad(h);
-    if (topM) topM.textContent = pad(m);
-    if (topS) topS.textContent = pad(s);
+        if (remainingMs <= 0) {
+            render(0, 0, 0);
+            return false;
+        }
 
-    // 2. تحديث العداد التاني اللي في الصفحة
-    const cdH = document.getElementById("cdHours");
-    const cdM = document.getElementById("cdMins");
-    const cdS = document.getElementById("cdSecs");
-
-    if (cdH) cdH.textContent = pad(h);
-    if (cdM) cdM.textContent = pad(m);
-    if (cdS) cdS.textContent = pad(s);
-  }
-
-  function calculateAndDisplay() {
-    const now = Date.now();
-    const remainingMs = EID_END_DATE - now;
-
-    // لو الوقت خلص (العيد انتهى)، صفر العداد ووقفه
-    if (remainingMs <= 0) {
-      updateDisplays(0, 0, 0);
-      return false; // يرجع false عشان نوقف الـ setInterval
+        const h = Math.floor(remainingMs / (1000 * 60 * 60));
+        const m = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((remainingMs % (1000 * 60)) / 1000);
+        
+        render(h, m, s);
+        return true;
     }
 
-    // حساب إجمالي الساعات المتبقية (ممكن تزيد عن 24 لأننا مش بنعرض أيام)
-    const h = Math.floor(remainingMs / (1000 * 60 * 60));
-    // حساب الدقائق المتبقية بعد خصم الساعات
-    const m = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
-    // حساب الثواني المتبقية
-    const s = Math.floor((remainingMs % (1000 * 60)) / 1000);
+    function render(h, m, s) {
+        const formatted = [pad(h), pad(m), pad(s)];
+        const mappings = {
+            "Hours": formatted[0],
+            "Mins": formatted[1],
+            "Secs": formatted[2]
+        };
 
-    updateDisplays(h, m, s);
-    return true; // يرجع true عشان يكمل تحديث
-  }
+        ["top", "cd"].forEach(prefix => {
+            for (let unit in mappings) {
+                const el = document.getElementById(prefix + unit);
+                if (el) el.textContent = mappings[unit];
+            }
+        });
+    }
 
-  // تشغيل الحسبة فوراً أول ما الصفحة تفتح عشان ميبقاش في تأخير ثانية
-  const isRunning = calculateAndDisplay();
+    // 🔥 السر هنا: تشغيل الحسبة فوراً قبل أي انتظار
+    updateAll(); 
 
-  // لو العرض لسه شغال، شغل الـ Interval عشان يحدث الثواني
-  if (isRunning) {
-    const interval = setInterval(() => {
-      const keepRunning = calculateAndDisplay();
-      if (!keepRunning) {
-        clearInterval(interval); // يوقف العداد تماماً لما يوصل لصفر
-      }
+    // وبعدين نشغل التكرار كل ثانية
+    const timer = setInterval(() => {
+        if (!updateAll()) clearInterval(timer);
     }, 1000);
-  }
+
+    // كود الكاروسيل (أراء العملاء) يفضل جوه الـ DOMContentLoaded
+    window.initReviewsCarousel = function() {
+        const track = document.getElementById("carouselTrack");
+        const nextBtn = document.getElementById("nextBtn");
+        const prevBtn = document.getElementById("prevBtn");
+        if (!track || !nextBtn || !prevBtn) return;
+
+        const originalCards = Array.from(track.children);
+        if (track.children.length < originalCards.length * 3) {
+             originalCards.forEach(card => track.appendChild(card.cloneNode(true)));
+             originalCards.forEach(card => track.appendChild(card.cloneNode(true)));
+        }
+
+        const getScrollAmount = () => {
+            const firstCard = track.querySelector(".review-video-card");
+            return firstCard ? firstCard.offsetWidth + 12 : 279;
+        };
+
+        setTimeout(() => {
+            const singleSetWidth = track.scrollWidth / 3;
+            track.scrollLeft = -singleSetWidth;
+            nextBtn.onclick = () => track.scrollBy({ left: -getScrollAmount(), behavior: "smooth" });
+            prevBtn.onclick = () => track.scrollBy({ left: getScrollAmount(), behavior: "smooth" });
+        }, 300);
+    };
 })();
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (window.initReviewsCarousel) window.initReviewsCarousel();
+});
+
+
+
+
+// 3. تشغيل الكل عند تحميل الصفحة
+document.addEventListener("DOMContentLoaded", () => {
+    initEidCountdown();
+    initReviewsCarousel();
+});
+
 
       /* FAQ Accordion */
       document.querySelectorAll(".faq-q").forEach((btn) => {
@@ -5543,77 +5573,77 @@ const EID_END_DATE = new Date("March 22, 2026 23:59:59").getTime();
         });
       }
 
-      function initCarousel() {
-        const track = document.getElementById("carouselTrack");
-        const nextBtn = document.getElementById("nextBtn");
-        const prevBtn = document.getElementById("prevBtn");
+      // function initCarousel() {
+      //   const track = document.getElementById("carouselTrack");
+      //   const nextBtn = document.getElementById("nextBtn");
+      //   const prevBtn = document.getElementById("prevBtn");
 
-        if (!track || !nextBtn || !prevBtn) return;
+      //   if (!track || !nextBtn || !prevBtn) return;
 
-        // نكرر الكروت 3 مرات عشان الـ Infinite Loop
-        const originalCards = Array.from(track.children);
-        originalCards.forEach((card) => {
-          track.appendChild(card.cloneNode(true));
-        });
-        originalCards.forEach((card) => {
-          track.appendChild(card.cloneNode(true));
-        });
+      //   // نكرر الكروت 3 مرات عشان الـ Infinite Loop
+      //   const originalCards = Array.from(track.children);
+      //   originalCards.forEach((card) => {
+      //     track.appendChild(card.cloneNode(true));
+      //   });
+      //   originalCards.forEach((card) => {
+      //     track.appendChild(card.cloneNode(true));
+      //   });
 
-        // دالة ذكية لحساب العرض الحالي للكارت + الـ 12 بيكسل (الـ Gap)
-        const getDynamicScrollAmount = () => {
-          const firstCard = track.querySelector(".review-video-card");
-          if (firstCard) {
-            // offsetWidth بيجيب عرض الكارت الحقيقي اللي ظاهر قدام المستخدم حالياً
-            return firstCard.offsetWidth + 12;
-          }
-          return 267; // قيمة احتياطية لو حصل مشكلة في التحميل
-        };
+      //   // دالة ذكية لحساب العرض الحالي للكارت + الـ 12 بيكسل (الـ Gap)
+      //   const getDynamicScrollAmount = () => {
+      //     const firstCard = track.querySelector(".review-video-card");
+      //     if (firstCard) {
+      //       // offsetWidth بيجيب عرض الكارت الحقيقي اللي ظاهر قدام المستخدم حالياً
+      //       return firstCard.offsetWidth + 12;
+      //     }
+      //     return 267; // قيمة احتياطية لو حصل مشكلة في التحميل
+      //   };
 
-        setTimeout(() => {
-          const singleSetWidth = track.scrollWidth / 3;
+      //   setTimeout(() => {
+      //     const singleSetWidth = track.scrollWidth / 3;
 
-          // نبدأ من المنتصف — بالسالب عشان RTL
-          track.scrollLeft = -singleSetWidth;
+      //     // نبدأ من المنتصف — بالسالب عشان RTL
+      //     track.scrollLeft = -singleSetWidth;
 
-          function checkLoop() {
-            // RTL: scrollLeft بيكون سالب
-            // لو العميل وصل للبداية (اليمين خالص)
-            if (track.scrollLeft >= -5) {
-              track.style.scrollBehavior = "auto";
-              track.scrollLeft = -singleSetWidth;
-              setTimeout(() => {
-                track.style.scrollBehavior = "smooth";
-              }, 20);
-            }
-            // لو العميل وصل للنهاية (الشمال خالص)
-            if (track.scrollLeft <= -(singleSetWidth * 2) + 5) {
-              track.style.scrollBehavior = "auto";
-              track.scrollLeft = -singleSetWidth;
-              setTimeout(() => {
-                track.style.scrollBehavior = "smooth";
-              }, 20);
-            }
-          }
+      //     function checkLoop() {
+      //       // RTL: scrollLeft بيكون سالب
+      //       // لو العميل وصل للبداية (اليمين خالص)
+      //       if (track.scrollLeft >= -5) {
+      //         track.style.scrollBehavior = "auto";
+      //         track.scrollLeft = -singleSetWidth;
+      //         setTimeout(() => {
+      //           track.style.scrollBehavior = "smooth";
+      //         }, 20);
+      //       }
+      //       // لو العميل وصل للنهاية (الشمال خالص)
+      //       if (track.scrollLeft <= -(singleSetWidth * 2) + 5) {
+      //         track.style.scrollBehavior = "auto";
+      //         track.scrollLeft = -singleSetWidth;
+      //         setTimeout(() => {
+      //           track.style.scrollBehavior = "smooth";
+      //         }, 20);
+      //       }
+      //     }
 
-          // عند الضغط على "التالي" (شمال في الـ RTL)
-          nextBtn.addEventListener("click", () => {
-            const scrollAmount = getDynamicScrollAmount(); // يحسب العرض "دلوقتي"
-            track.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-            setTimeout(checkLoop, 400);
-          });
+      //     // عند الضغط على "التالي" (شمال في الـ RTL)
+      //     nextBtn.addEventListener("click", () => {
+      //       const scrollAmount = getDynamicScrollAmount(); // يحسب العرض "دلوقتي"
+      //       track.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+      //       setTimeout(checkLoop, 400);
+      //     });
 
-          // عند الضغط على "السابق" (يمين في الـ RTL)
-          prevBtn.addEventListener("click", () => {
-            const scrollAmount = getDynamicScrollAmount(); // يحسب العرض "دلوقتي"
-            track.scrollBy({ left: scrollAmount, behavior: "smooth" });
-            setTimeout(checkLoop, 400);
-          });
-        }, 100);
-      }
-      window.addEventListener("DOMContentLoaded", () => {
-        initCountdown();
-        initCarousel();
-      });
+      //     // عند الضغط على "السابق" (يمين في الـ RTL)
+      //     prevBtn.addEventListener("click", () => {
+      //       const scrollAmount = getDynamicScrollAmount(); // يحسب العرض "دلوقتي"
+      //       track.scrollBy({ left: scrollAmount, behavior: "smooth" });
+      //       setTimeout(checkLoop, 400);
+      //     });
+      //   }, 100);
+      // }
+      // window.addEventListener("DOMContentLoaded", () => {
+      //   initCountdown();
+      //   initCarousel();
+      // });
 
       const slider = document.getElementById("mainSlider");
       const slides = document.querySelectorAll(".m-slide");
