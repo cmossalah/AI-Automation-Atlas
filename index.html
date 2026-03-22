@@ -5350,108 +5350,80 @@
       /* VSL Activation */
       /* Countdown Timer */
 
-      (function () {
-        const DURATION_MS = 72 * 60 * 60 * 1000; // 72 ساعة
-        const STORAGE_KEY = "atlas_timer_expiry";
+(function () {
+    // 1. إعدادات العداد الموحد (72 ساعة)
+    const DURATION_MS = 72 * 60 * 60 * 1000; 
 
-        function getExpiryTime() {
-          let expiry = localStorage.getItem(STORAGE_KEY);
-          const now = Date.now();
+    function updateGlobalTimer() {
+        const now = Date.now(); // التوقيت العالمي بالملي ثانية
+        
+        // المعادلة دي بتخلي العداد موحد عند كل الناس
+        // بنقسم الوقت الحالي على 72 ساعة وبناخد "الباقي" عشان نعرف إحنا فين في الدورة الحالية
+        const remainingMs = DURATION_MS - (now % DURATION_MS);
+        
+        const h = Math.floor(remainingMs / (1000 * 60 * 60));
+        const m = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((remainingMs % (1000 * 60)) / 1000);
 
-          // لو مفيش تاريخ مسجل أو التاريخ القديم خلص، ننشئ تاريخ جديد (الآن + 72 ساعة)
-          if (!expiry || parseInt(expiry) < now) {
-            expiry = now + DURATION_MS;
-            localStorage.setItem(STORAGE_KEY, expiry);
-          }
-          return parseInt(expiry);
-        }
+        render(h, m, s);
+    }
 
-        function updateCountdown() {
-          const now = Date.now();
-          let expiry = getExpiryTime();
-          let remainingMs = expiry - now;
-
-          // حالة الأمان: لو العداد خلص وإحنا جوه الصفحة، ريست فوراً وابدأ 72 ساعة جديدة
-          if (remainingMs <= 0) {
-            expiry = now + DURATION_MS;
-            localStorage.setItem(STORAGE_KEY, expiry);
-            remainingMs = DURATION_MS;
-          }
-
-          const h = Math.floor(remainingMs / (1000 * 60 * 60));
-          const m = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
-          const s = Math.floor((remainingMs % (1000 * 60)) / 1000);
-
-          render(h, m, s);
-        }
-
-        function render(h, m, s) {
-          const pad = (n) => String(n).padStart(2, "0");
-          const formatted = [pad(h), pad(m), pad(s)];
-
-          const ids = [
-            "topHours",
-            "topMins",
-            "topSecs",
-            "cdHours",
-            "cdMins",
-            "cdSecs",
-          ];
-          ids.forEach((id) => {
+    function render(h, m, s) {
+        const pad = (n) => String(n).padStart(2, "0");
+        const formatted = [pad(h), pad(m), pad(s)];
+        
+        // بنحدث الهيدر والعداد اللي في نص الصفحة مع بعض
+        const ids = ["topHours", "topMins", "topSecs", "cdHours", "cdMins", "cdSecs"];
+        ids.forEach(id => {
             const el = document.getElementById(id);
             if (el) {
-              if (id.includes("Hours")) el.textContent = formatted[0];
-              if (id.includes("Mins")) el.textContent = formatted[1];
-              if (id.includes("Secs")) el.textContent = formatted[2];
+                if (id.includes("Hours")) el.textContent = formatted[0];
+                if (id.includes("Mins")) el.textContent = formatted[1];
+                if (id.includes("Secs")) el.textContent = formatted[2];
             }
-          });
+        });
+    }
+
+    // تشغيل فوري (بدون انتظار) لمنع الرعشة
+    updateGlobalTimer();
+    setInterval(updateGlobalTimer, 1000);
+
+    // 2. كود الكاروسيل (أراء العملاء) - لازم يفضل عشان الزراير تشتغل
+    window.initReviewsCarousel = function() {
+        const track = document.getElementById("carouselTrack");
+        const nextBtn = document.getElementById("nextBtn");
+        const prevBtn = document.getElementById("prevBtn");
+        if (!track || !nextBtn || !prevBtn) return;
+
+        const originalCards = Array.from(track.children);
+        if (track.children.length < originalCards.length * 3) {
+             originalCards.forEach(card => track.appendChild(card.cloneNode(true)));
+             originalCards.forEach(card => track.appendChild(card.cloneNode(true)));
         }
 
-        // تشغيل فوري أول ما السكربت يقرأ
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-
-        // --- كود الكاروسيل (أبقاءه لضمان عمل الزراير) ---
-        window.initReviewsCarousel = function () {
-          const track = document.getElementById("carouselTrack");
-          const nextBtn = document.getElementById("nextBtn");
-          const prevBtn = document.getElementById("prevBtn");
-          if (!track || !nextBtn || !prevBtn) return;
-
-          const originalCards = Array.from(track.children);
-          if (track.children.length < originalCards.length * 3) {
-            originalCards.forEach((card) =>
-              track.appendChild(card.cloneNode(true)),
-            );
-            originalCards.forEach((card) =>
-              track.appendChild(card.cloneNode(true)),
-            );
-          }
-
-          setTimeout(() => {
+        setTimeout(() => {
             const singleSetWidth = track.scrollWidth / 3;
             track.scrollLeft = -singleSetWidth;
-            nextBtn.onclick = () =>
-              track.scrollBy({
-                left: -(
-                  track.querySelector(".review-video-card").offsetWidth + 12
-                ),
-                behavior: "smooth",
-              });
-            prevBtn.onclick = () =>
-              track.scrollBy({
-                left:
-                  track.querySelector(".review-video-card").offsetWidth + 12,
-                behavior: "smooth",
-              });
-          }, 300);
-        };
-      })();
+            nextBtn.onclick = () => {
+                const amount = track.querySelector(".review-video-card").offsetWidth + 12;
+                track.scrollBy({ left: -amount, behavior: "smooth" });
+            };
+            prevBtn.onclick = () => {
+                const amount = track.querySelector(".review-video-card").offsetWidth + 12;
+                track.scrollBy({ left: amount, behavior: "smooth" });
+            };
+        }, 300);
+    };
+})();
 
-      document.addEventListener("DOMContentLoaded", () => {
-        if (window.initReviewsCarousel) window.initReviewsCarousel();
-      });
+// تشغيل الكاروسيل عند تحميل الصفحة
+document.addEventListener("DOMContentLoaded", () => {
+    if (window.initReviewsCarousel) window.initReviewsCarousel();
+});
 
+
+
+      
       /* FAQ Accordion */
       document.querySelectorAll(".faq-q").forEach((btn) => {
         btn.addEventListener("click", () => {
