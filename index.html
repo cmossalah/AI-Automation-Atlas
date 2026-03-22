@@ -5350,78 +5350,87 @@
       /* VSL Activation */
       /* Countdown Timer */
 
-(function () {
-    // 1. إعدادات العداد الموحد (72 ساعة)
+      (function () {
+    // 1. العداد العالمي (72 ساعة) - شغال 100% وموحد لكل الأجهزة
     const DURATION_MS = 72 * 60 * 60 * 1000; 
-
     function updateGlobalTimer() {
-        const now = Date.now(); // التوقيت العالمي بالملي ثانية
-        
-        // المعادلة دي بتخلي العداد موحد عند كل الناس
-        // بنقسم الوقت الحالي على 72 ساعة وبناخد "الباقي" عشان نعرف إحنا فين في الدورة الحالية
+        const now = Date.now(); 
         const remainingMs = DURATION_MS - (now % DURATION_MS);
-        
         const h = Math.floor(remainingMs / (1000 * 60 * 60));
         const m = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
         const s = Math.floor((remainingMs % (1000 * 60)) / 1000);
-
-        render(h, m, s);
-    }
-
-    function render(h, m, s) {
         const pad = (n) => String(n).padStart(2, "0");
         const formatted = [pad(h), pad(m), pad(s)];
-        
-        // بنحدث الهيدر والعداد اللي في نص الصفحة مع بعض
-        const ids = ["topHours", "topMins", "topSecs", "cdHours", "cdMins", "cdSecs"];
-        ids.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                if (id.includes("Hours")) el.textContent = formatted[0];
-                if (id.includes("Mins")) el.textContent = formatted[1];
-                if (id.includes("Secs")) el.textContent = formatted[2];
-            }
+        ["top", "cd"].forEach(prefix => {
+            ["Hours", "Mins", "Secs"].forEach((unit, i) => {
+                const el = document.getElementById(prefix + unit);
+                if (el) el.textContent = formatted[i];
+            });
         });
     }
-
-    // تشغيل فوري (بدون انتظار) لمنع الرعشة
-    updateGlobalTimer();
     setInterval(updateGlobalTimer, 1000);
+    updateGlobalTimer();
 
-    // 2. كود الكاروسيل (أراء العملاء) - لازم يفضل عشان الزراير تشتغل
+    // 2. الكاروسيل اللانهائي (حل مشكلة اللوب في الـ RTL)
     window.initReviewsCarousel = function() {
         const track = document.getElementById("carouselTrack");
         const nextBtn = document.getElementById("nextBtn");
         const prevBtn = document.getElementById("prevBtn");
         if (!track || !nextBtn || !prevBtn) return;
 
+        // مضاعفة الكروت للتكرار
         const originalCards = Array.from(track.children);
-        if (track.children.length < originalCards.length * 3) {
-             originalCards.forEach(card => track.appendChild(card.cloneNode(true)));
-             originalCards.forEach(card => track.appendChild(card.cloneNode(true)));
+        if (track.children.length === originalCards.length) {
+            originalCards.forEach(card => track.appendChild(card.cloneNode(true)));
+            originalCards.forEach(card => track.appendChild(card.cloneNode(true)));
         }
 
+        const getCardWidth = () => track.querySelector(".review-video-card").offsetWidth + 12;
+
+        // دالة النقل الذكي (Snap)
+        function resetPositionIfNeeded() {
+            const scrollPos = Math.abs(track.scrollLeft);
+            const oneSetUnit = track.scrollWidth / 3;
+
+            // لو قرب من النهاية الشمال أو اليمين، ارجع للمنتصف
+            if (scrollPos <= 10 || scrollPos >= (oneSetUnit * 2) - 10) {
+                track.style.scrollBehavior = "auto";
+                track.scrollLeft = -oneSetUnit;
+                // نرجعه Smooth بعد جزء من الثانية
+                setTimeout(() => { track.style.scrollBehavior = "smooth"; }, 50);
+            }
+        }
+
+        // إعداد البداية (الوقوف في المنتصف)
         setTimeout(() => {
-            const singleSetWidth = track.scrollWidth / 3;
-            track.scrollLeft = -singleSetWidth;
-            nextBtn.onclick = () => {
-                const amount = track.querySelector(".review-video-card").offsetWidth + 12;
-                track.scrollBy({ left: -amount, behavior: "smooth" });
-            };
-            prevBtn.onclick = () => {
-                const amount = track.querySelector(".review-video-card").offsetWidth + 12;
-                track.scrollBy({ left: amount, behavior: "smooth" });
-            };
-        }, 300);
+            const oneSetUnit = track.scrollWidth / 3;
+            track.scrollLeft = -oneSetUnit;
+            track.style.scrollBehavior = "smooth";
+        }, 100);
+
+        nextBtn.onclick = () => {
+            track.scrollBy({ left: -getCardWidth(), behavior: "smooth" });
+            setTimeout(resetPositionIfNeeded, 500);
+        };
+
+        prevBtn.onclick = () => {
+            track.scrollBy({ left: getCardWidth(), behavior: "smooth" });
+            setTimeout(resetPositionIfNeeded, 500);
+        };
+
+        // مراقبة السكرول اليدوي (للموبايل)
+        track.addEventListener("scroll", () => {
+            if (track.style.scrollBehavior !== "auto") {
+                clearTimeout(window.loopTimeout);
+                window.loopTimeout = setTimeout(resetPositionIfNeeded, 150);
+            }
+        });
     };
 })();
 
-// تشغيل الكاروسيل عند تحميل الصفحة
 document.addEventListener("DOMContentLoaded", () => {
     if (window.initReviewsCarousel) window.initReviewsCarousel();
 });
-
-
 
       
       /* FAQ Accordion */
