@@ -5209,7 +5209,12 @@
                 <div class="pm-details">
                   <span class="pm-name">InstaPay</span>
                   <span class="pm-number">010 1938 1981</span>
-                  <a class="pm-instapaylink" href="https://ipn.eg/S/salahabouzeid2/instapay/8D6xNU" target="_blank">https://ipn.eg/S/salahabouzeid2</a>
+                  <a
+                    class="pm-instapaylink"
+                    href="https://ipn.eg/S/salahabouzeid2/instapay/8D6xNU"
+                    target="_blank"
+                    >https://ipn.eg/S/salahabouzeid2</a
+                  >
                 </div>
                 <button
                   class="pm-copy-btn"
@@ -5226,13 +5231,13 @@
               ></i>
               بعد التحويل ابعت الإيصال على
               <a
-                href="https://wa.me/201062143146?text=%D8%AA%D9%85%20%D8%A7%D9%84%D8%AF%D9%81%D8%B9"
+                href="https://wa.me/201033903334?text=%D8%AA%D9%85%20%D8%A7%D9%84%D8%AF%D9%81%D8%B9"
                 style="
                   text-decoration: underline;
                   font-size: bold;
                   color: var(--green);
                 "
-                >واتساب 01062143146</a
+                >واتساب 01033903334</a
               >
               للتفعيل والتيم هيرد عليك خلال لحظات
             </p>
@@ -5296,7 +5301,7 @@
         </div>
       </div>
       <a
-        href="https://wa.me/201062143146?text=%D8%AA%D9%85%20%D8%A7%D9%84%D8%AF%D9%81%D8%B9"
+        href="https://wa.me/201033903334?text=%D8%AA%D9%85%20%D8%A7%D9%84%D8%AF%D9%81%D8%B9"
         target="_blank"
         class="whatsapp-bottom-btn"
       >
@@ -5356,78 +5361,90 @@
       /* VSL Activation */
       /* Countdown Timer */
 
-  (function () {
-    // 1. إعدادات العداد الموحد (72 ساعة)
-    const DURATION_MS = 72 * 60 * 60 * 1000; 
+      (function () {
+        // 1. إعدادات العداد الموحد (72 ساعة)
+        const DURATION_MS = 72 * 60 * 60 * 1000;
 
-    function updateGlobalTimer() {
-        const now = Date.now(); // التوقيت العالمي بالملي ثانية
-        
-        // المعادلة دي بتخلي العداد موحد عند كل الناس
-        // بنقسم الوقت الحالي على 72 ساعة وبناخد "الباقي" عشان نعرف إحنا فين في الدورة الحالية
-        const remainingMs = DURATION_MS - (now % DURATION_MS);
-        
-        const h = Math.floor(remainingMs / (1000 * 60 * 60));
-        const m = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((remainingMs % (1000 * 60)) / 1000);
+        function updateGlobalTimer() {
+          const now = Date.now(); // التوقيت العالمي بالملي ثانية
 
-        render(h, m, s);
-    }
+          // المعادلة دي بتخلي العداد موحد عند كل الناس
+          // بنقسم الوقت الحالي على 72 ساعة وبناخد "الباقي" عشان نعرف إحنا فين في الدورة الحالية
+          const remainingMs = DURATION_MS - (now % DURATION_MS);
 
-    function render(h, m, s) {
-        const pad = (n) => String(n).padStart(2, "0");
-        const formatted = [pad(h), pad(m), pad(s)];
-        
-        // بنحدث الهيدر والعداد اللي في نص الصفحة مع بعض
-        const ids = ["topHours", "topMins", "topSecs", "cdHours", "cdMins", "cdSecs"];
-        ids.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                if (id.includes("Hours")) el.textContent = formatted[0];
-                if (id.includes("Mins")) el.textContent = formatted[1];
-                if (id.includes("Secs")) el.textContent = formatted[2];
-            }
-        });
-    }
+          const h = Math.floor(remainingMs / (1000 * 60 * 60));
+          const m = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+          const s = Math.floor((remainingMs % (1000 * 60)) / 1000);
 
-    // تشغيل فوري (بدون انتظار) لمنع الرعشة
-    updateGlobalTimer();
-    setInterval(updateGlobalTimer, 1000);
-
-    // 2. كود الكاروسيل (أراء العملاء) - لازم يفضل عشان الزراير تشتغل
-    window.initReviewsCarousel = function() {
-        const track = document.getElementById("carouselTrack");
-        const nextBtn = document.getElementById("nextBtn");
-        const prevBtn = document.getElementById("prevBtn");
-        if (!track || !nextBtn || !prevBtn) return;
-
-        const originalCards = Array.from(track.children);
-        if (track.children.length < originalCards.length * 3) {
-             originalCards.forEach(card => track.appendChild(card.cloneNode(true)));
-             originalCards.forEach(card => track.appendChild(card.cloneNode(true)));
+          render(h, m, s);
         }
 
-        setTimeout(() => {
+        function render(h, m, s) {
+          const pad = (n) => String(n).padStart(2, "0");
+          const formatted = [pad(h), pad(m), pad(s)];
+
+          // بنحدث الهيدر والعداد اللي في نص الصفحة مع بعض
+          const ids = [
+            "topHours",
+            "topMins",
+            "topSecs",
+            "cdHours",
+            "cdMins",
+            "cdSecs",
+          ];
+          ids.forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) {
+              if (id.includes("Hours")) el.textContent = formatted[0];
+              if (id.includes("Mins")) el.textContent = formatted[1];
+              if (id.includes("Secs")) el.textContent = formatted[2];
+            }
+          });
+        }
+
+        // تشغيل فوري (بدون انتظار) لمنع الرعشة
+        updateGlobalTimer();
+        setInterval(updateGlobalTimer, 1000);
+
+        // 2. كود الكاروسيل (أراء العملاء) - لازم يفضل عشان الزراير تشتغل
+        window.initReviewsCarousel = function () {
+          const track = document.getElementById("carouselTrack");
+          const nextBtn = document.getElementById("nextBtn");
+          const prevBtn = document.getElementById("prevBtn");
+          if (!track || !nextBtn || !prevBtn) return;
+
+          const originalCards = Array.from(track.children);
+          if (track.children.length < originalCards.length * 3) {
+            originalCards.forEach((card) =>
+              track.appendChild(card.cloneNode(true)),
+            );
+            originalCards.forEach((card) =>
+              track.appendChild(card.cloneNode(true)),
+            );
+          }
+
+          setTimeout(() => {
             const singleSetWidth = track.scrollWidth / 3;
             track.scrollLeft = -singleSetWidth;
             nextBtn.onclick = () => {
-                const amount = track.querySelector(".review-video-card").offsetWidth + 12;
-                track.scrollBy({ left: -amount, behavior: "smooth" });
+              const amount =
+                track.querySelector(".review-video-card").offsetWidth + 12;
+              track.scrollBy({ left: -amount, behavior: "smooth" });
             };
             prevBtn.onclick = () => {
-                const amount = track.querySelector(".review-video-card").offsetWidth + 12;
-                track.scrollBy({ left: amount, behavior: "smooth" });
+              const amount =
+                track.querySelector(".review-video-card").offsetWidth + 12;
+              track.scrollBy({ left: amount, behavior: "smooth" });
             };
-        }, 300);
-    };
-})();
+          }, 300);
+        };
+      })();
 
-// تشغيل الكاروسيل عند تحميل الصفحة
-document.addEventListener("DOMContentLoaded", () => {
-    if (window.initReviewsCarousel) window.initReviewsCarousel();
-});
+      // تشغيل الكاروسيل عند تحميل الصفحة
+      document.addEventListener("DOMContentLoaded", () => {
+        if (window.initReviewsCarousel) window.initReviewsCarousel();
+      });
 
-      
       /* FAQ Accordion */
       document.querySelectorAll(".faq-q").forEach((btn) => {
         btn.addEventListener("click", () => {
