@@ -3536,9 +3536,9 @@
     <!-- ════════════════════════════════════════
      URGENCY TOP BAR
     ════════════════════════════════════════ -->
-    <!-- <div class="urgency-topbar">
+    <div class="urgency-topbar">
       <div class="topbar-content">
-        <span class="discount">السعر هيزيد 35% بعد:</span>
+        <span class="discount">خصم العيد الاكبر 30% ينتهي بعد:</span>
         <div
           class="timer-inline"
           style="display: flex; align-items: center; gap: 5px; direction: ltr"
@@ -3570,7 +3570,7 @@
             <span id="topSecs">00</span>
             <span class="metric">ثواني</span>
           </div>
-          <!-- <script>
+          <script>
             (function () {
               // 72 ساعة محولة لـ ميلي ثانية
               const DURATION_MS = 72 * 60 * 60 * 1000;
@@ -3592,7 +3592,7 @@
               document.getElementById("topMins").textContent = pad(m);
               document.getElementById("topSecs").textContent = pad(s);
             })();
-          </script> -->
+          </script>
         </div>
       </div>
     </div>
@@ -4655,20 +4655,20 @@
         <div class="ramadan-card">
           <div class="offer-tag">
             <span class="green-dot"></span>
-            عرض رمضان الذهبي
+            عرض العيد الأكبر
           </div>
-          <h3>السعر متاح لأول 100 شخص فقط</h3>
+          <h3>السعر متاح ليومين العيد فقط</h3>
           <p class="price-sub-desc">
-            السعر لأول 100 مشترك: 2,999 جنيه وبعدها يرجع السعر الطبيعي.
+            السعر في عرض العيد: 2,200 جنيه وبعدها يرجع السعر الطبيعي.
           </p>
 
           <div class="price-main-box">
             <div class="price-right-side">
               <span class="label">السعر الحالي:</span>
-              <div class="price-amount" style="direction: ltr">2,999 EGP</div>
+              <div class="price-amount" style="direction: ltr">2,200 EGP</div>
               <span class="sub-label"
-                >بعد اكتمال 100 شخص هيرجع السعر لـ
-                <span style="color: var(--red)">4,000 جنيه</span></span
+                >بعد العيد هيرجع السعر لـ
+                <span style="color: var(--red)">3,000 جنيه</span></span
               >
             </div>
           </div>
@@ -4823,10 +4823,10 @@
               القيمة الإجمالية الكاملة:
               <span class="strike">30,000EGP</span>
             </div>
-            <div class="price-today-label">استثمر اليوم فقط بـ</div>
+            <div class="price-today-label">استثمر في العيد فقط بـ</div>
             <div>
               <span class="price-currency">EGP</span>
-              <span class="price-big">2,999</span>
+              <span class="price-big">2,200</span>
             </div>
             <div class="price-period">
               دفع مرة واحدة | وصول مدى الحياة | كل التحديثات المستقبلية
@@ -5097,7 +5097,7 @@
             class="btn-cta"
             style="font-size: clamp(1.1rem, 3vw, 1.4rem); padding: 20px 52px"
           >
-            انضم الآن — EGP 2,999 فقط
+            انضم الآن — EGP 2,200 فقط في العيد
           </a>
           <div class="cta-sub-note" style="margin-top: 18px">
             <span class="note-item"
@@ -5140,7 +5140,7 @@
               />
               داخل مصر
             </div>
-            <h3 class="payment-title">ادفع 2,999 بالجنيه المصري</h3>
+            <h3 class="payment-title">ادفع 2,200 بالجنيه المصري</h3>
             <p class="payment-sub">
               حوّل المبلغ على أي من الأرقام الآتية وابعت إيصال التحويل
             </p>
@@ -5217,7 +5217,7 @@
               <i class="fa-solid fa-earth-asia" style="margin-left: 7px"></i>
               خارج مصر
             </div>
-            <h3 class="payment-title">ادفع $60 بالدولار</h3>
+            <h3 class="payment-title">ادفع $50 بالدولار</h3>
             <p class="payment-sub">دفع دولي آمن عبر باي بال والكريدت كارد</p>
 
             <div class="payment-methods">
@@ -5310,8 +5310,8 @@
     ════════════════════════════════════════ -->
     <div class="sticky-cta" id="stickyCta">
       <div class="sticky-left">
-        <strong>السعر هيزيد 35% قريبا</strong>
-        <span>EGP 2,999 فقط | ضمان استرداد 3 أيام</span>
+        <strong>خصم العيد الاكبر 30%</strong>
+        <span>EGP 2,200 فقط | ضمان استرداد 3 أيام</span>
       </div>
       <a href="#payment" class="btn-cta">انضم الآن ←</a>
     </div>
@@ -5323,16 +5323,21 @@
       /* VSL Activation */
       /* Countdown Timer */
 
-      (function () {
-        // 1. إعدادات العداد الموحد (72 ساعة)
-        const DURATION_MS = 72 * 60 * 60 * 1000;
+  (function () {
+        // 1. تحديد تاريخ نهاية العداد بالظبط (30 مايو الساعة 12 بليل / بداية يوم 31 مايو)
+        // ملحوظة: تم ضبط السنة على 2026 تلقائياً
+        const TARGET_DATE = new Date("2026-05-31T00:00:00").getTime();
 
         function updateGlobalTimer() {
-          const now = Date.now(); // التوقيت العالمي بالملي ثانية
+          const now = Date.now(); // التوقيت الحالي بالملي ثانية
 
-          // المعادلة دي بتخلي العداد موحد عند كل الناس
-          // بنقسم الوقت الحالي على 72 ساعة وبناخد "الباقي" عشان نعرف إحنا فين في الدورة الحالية
-          const remainingMs = DURATION_MS - (now % DURATION_MS);
+          // حساب الوقت المتبقي بين التاريخ المستهدف والوقت الحالي
+          let remainingMs = TARGET_DATE - now;
+
+          // لو الوقت خلص، بنثبت العداد على صفر ومينزلش بالسالب
+          if (remainingMs <= 0) {
+            remainingMs = 0;
+          }
 
           const h = Math.floor(remainingMs / (1000 * 60 * 60));
           const m = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
@@ -5366,7 +5371,13 @@
 
         // تشغيل فوري (بدون انتظار) لمنع الرعشة
         updateGlobalTimer();
-        setInterval(updateGlobalTimer, 1000);
+        const timerInterval = setInterval(() => {
+          updateGlobalTimer();
+          // لو التايمر وصل لصفر نوقف الانترفل تماماً لتوفير الأداء
+          if (TARGET_DATE - Date.now() <= 0) {
+            clearInterval(timerInterval);
+          }
+        }, 1000);
 
         // 2. كود الكاروسيل (أراء العملاء) - لازم يفضل عشان الزراير تشتغل
         window.initReviewsCarousel = function () {
